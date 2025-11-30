@@ -145,7 +145,7 @@ window.addEventListener('scroll', () => {
 console.log('%c👋 Hello, curious developer!', 'font-size: 20px; font-weight: bold;');
 console.log('%cInterested in working together? Reach out!', 'font-size: 14px; color: #00d4aa;');
 
-// Mobile Hamburger Menu
+// Mobile Hamburger Menu - Simple version that doesn't block links
 (function() {
     var hamburger = document.querySelector('.hamburger');
     var navMenu = document.querySelector('.nav-links');
@@ -173,25 +173,12 @@ console.log('%cInterested in working together? Reach out!', 'font-size: 14px; co
     // Close on overlay click
     overlay.addEventListener('click', closeMenu);
     
-    // Handle link clicks - scroll to section
+    // Just close menu when links are clicked - don't prevent default!
     var links = navMenu.querySelectorAll('a');
     for (var i = 0; i < links.length; i++) {
-        links[i].addEventListener('click', function(e) {
-            e.preventDefault();
-            var targetId = this.getAttribute('href');
-            var targetSection = document.querySelector(targetId);
-            
+        links[i].addEventListener('click', function() {
+            // Just close the menu, let the link work normally
             closeMenu();
-            
-            if (targetSection) {
-                setTimeout(function() {
-                    var offsetTop = targetSection.offsetTop - 80;
-                    window.scrollTo({
-                        top: offsetTop,
-                        behavior: 'smooth'
-                    });
-                }, 300);
-            }
         });
     }
 })();

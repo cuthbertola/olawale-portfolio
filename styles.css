@@ -811,3 +811,23 @@ nav {
         text-align: center;
     }
 }
+
+/* Ensure mobile nav links are clickable */
+@media (max-width: 768px) {
+    .nav-links.active {
+        display: flex !important;
+    }
+    
+    .nav-links.active li {
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .nav-links.active a {
+        display: block;
+        padding: 20px;
+        width: 100%;
+        -webkit-tap-highlight-color: rgba(0, 212, 170, 0.3);
+    }
+}
