@@ -147,13 +147,13 @@ console.log('%cInterested in working together? Reach out!', 'font-size: 14px; co
 
 // Mobile Hamburger Menu
 (function() {
-    const hamburger = document.querySelector('.hamburger');
-    const navMenu = document.querySelector('.nav-links');
+    var hamburger = document.querySelector('.hamburger');
+    var navMenu = document.querySelector('.nav-links');
     
     if (!hamburger || !navMenu) return;
     
     // Create overlay
-    const overlay = document.createElement('div');
+    var overlay = document.createElement('div');
     overlay.className = 'nav-overlay';
     document.body.appendChild(overlay);
     
@@ -173,10 +173,25 @@ console.log('%cInterested in working together? Reach out!', 'font-size: 14px; co
     // Close on overlay click
     overlay.addEventListener('click', closeMenu);
     
-    // Close menu and navigate when clicking links
-    navMenu.querySelectorAll('a').forEach(function(link) {
-        link.addEventListener('click', function() {
+    // Handle link clicks - scroll to section
+    var links = navMenu.querySelectorAll('a');
+    for (var i = 0; i < links.length; i++) {
+        links[i].addEventListener('click', function(e) {
+            e.preventDefault();
+            var targetId = this.getAttribute('href');
+            var targetSection = document.querySelector(targetId);
+            
             closeMenu();
+            
+            if (targetSection) {
+                setTimeout(function() {
+                    var offsetTop = targetSection.offsetTop - 80;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }, 300);
+            }
         });
-    });
+    }
 })();
