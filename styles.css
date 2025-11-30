@@ -938,3 +938,62 @@ nav {
         display: block;
     }
 }
+
+/* ========== MOJISOLA STYLE MOBILE MENU ========== */
+@media (max-width: 768px) {
+    .hamburger {
+        display: flex;
+        position: relative;
+        z-index: 1001;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .nav-links.active {
+        display: block;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #0a0a0b;
+        padding: 40px 30px;
+        z-index: 1000;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .nav-links.active li {
+        display: block;
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-links.active li a {
+        display: block;
+        padding: 15px 0;
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-size: 1.5rem;
+        font-weight: 400;
+        font-style: italic;
+        color: #8e8e93;
+        text-decoration: none;
+        text-transform: capitalize;
+        letter-spacing: 0;
+        transition: color 0.3s ease;
+    }
+
+    .nav-links.active li a.active,
+    .nav-links.active li a:active {
+        color: #d4a574;
+    }
+
+    /* Make nav position relative for dropdown */
+    nav {
+        position: fixed;
+    }
+
+    .nav-container {
+        position: relative;
+    }
+}
