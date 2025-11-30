@@ -791,7 +791,7 @@ nav {
     }
 }
 
-/* Fix Mobile Menu Links */
+
 @media (max-width: 768px) {
     .nav-links.active {
         display: flex !important;
@@ -812,7 +812,7 @@ nav {
     }
 }
 
-/* Ensure mobile nav links are clickable */
+
 @media (max-width: 768px) {
     .nav-links.active {
         display: flex !important;
@@ -832,7 +832,7 @@ nav {
     }
 }
 
-/* Fix Mobile Menu Z-Index */
+
 @media (max-width: 768px) {
     .nav-overlay {
         z-index: 999 !important;
@@ -858,5 +858,83 @@ nav {
     
     .hamburger {
         z-index: 1002 !important;
+    }
+}
+
+/* ========== MOBILE MENU - FINAL FIX ========== */
+@media (max-width: 768px) {
+    /* Hamburger Button */
+    .hamburger {
+        display: flex;
+        position: relative;
+        z-index: 9999;
+    }
+
+    /* Navigation Menu */
+    .nav-links {
+        display: none;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 70%;
+        max-width: 300px;
+        height: 100vh;
+        background: #111113;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 0;
+        padding: 0;
+        border-left: 1px solid rgba(255, 255, 255, 0.06);
+        z-index: 9998;
+        list-style: none;
+    }
+
+    /* Menu Open State */
+    .nav-links.active {
+        display: flex !important;
+    }
+
+    /* List Items */
+    .nav-links li {
+        width: 100%;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* THE ACTUAL CLICKABLE LINKS */
+    .nav-links li a.nav-link {
+        display: block;
+        width: 100%;
+        padding: 20px 30px;
+        font-size: 1rem;
+        color: #8e8e93;
+        text-decoration: none;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        -webkit-tap-highlight-color: rgba(0, 212, 170, 0.5);
+        cursor: pointer;
+    }
+
+    .nav-links li a.nav-link:active {
+        background: rgba(0, 212, 170, 0.2);
+        color: #00d4aa;
+    }
+
+    /* Overlay - MUST be behind the menu */
+    .nav-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 9997;
+    }
+
+    .nav-overlay.active {
+        display: block;
     }
 }
