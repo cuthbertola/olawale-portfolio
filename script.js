@@ -77,6 +77,12 @@ style.textContent = `
         opacity: 1 !important;
         transform: translateY(0) !important;
     }
+    .body-no-scroll {
+        overflow: hidden !important;
+        position: fixed !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
 `;
 document.head.appendChild(style);
 
@@ -138,10 +144,11 @@ window.addEventListener('scroll', () => {
 console.log('%c👋 Hello, curious developer!', 'font-size: 20px; font-weight: bold;');
 console.log('%cInterested in working together? Reach out!', 'font-size: 14px; color: #00d4aa;');
 
-// Mobile Hamburger Menu with Touch Support
+// Mobile Hamburger Menu - FIXED VERSION
 (function() {
     var hamburger = document.querySelector('.hamburger');
     var navMenu = document.querySelector('.nav-links');
+    var scrollPosition = 0;
     
     if (!hamburger || !navMenu) return;
     
@@ -150,20 +157,35 @@ console.log('%cInterested in working together? Reach out!', 'font-size: 14px; co
     overlay.className = 'nav-overlay';
     document.body.appendChild(overlay);
     
+    function disableScroll() {
+        scrollPosition = window.pageYOffset;
+        document.body.classList.add('body-no-scroll');
+        document.body.style.top = -scrollPosition + 'px';
+    }
+    
+    function enableScroll() {
+        document.body.classList.remove('body-no-scroll');
+        document.body.style.top = '';
+        window.scrollTo(0, scrollPosition);
+    }
+    
     function closeMenu() {
         hamburger.classList.remove('active');
         navMenu.classList.remove('active');
         overlay.classList.remove('active');
+        enableScroll();
     }
     
     function openMenu() {
         hamburger.classList.add('active');
         navMenu.classList.add('active');
         overlay.classList.add('active');
+        disableScroll();
     }
     
-    // Toggle menu on hamburger click/touch
+    // Toggle menu on hamburger click
     hamburger.addEventListener('click', function(e) {
+        e.preventDefault();
         e.stopPropagation();
         if (navMenu.classList.contains('active')) {
             closeMenu();
@@ -172,36 +194,34 @@ console.log('%cInterested in working together? Reach out!', 'font-size: 14px; co
         }
     });
     
-    // Close on overlay click/touch
-    overlay.addEventListener('click', closeMenu);
+    // Close on overlay click
+    overlay.addEventListener('click', function(e) {
+        e.preventDefault();
+        closeMenu();
+    });
     
-    // Handle link clicks with BOTH click and touchend
+    // Handle link navigation
     var links = navMenu.querySelectorAll('a');
     
     links.forEach(function(link) {
-        // Function to handle navigation
-        function navigateToSection(e) {
+        link.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
             
-            var targetId = link.getAttribute('href');
+            var targetId = this.getAttribute('href');
             var targetSection = document.querySelector(targetId);
             
-            // Close menu first
+            // Close menu and enable scroll
             closeMenu();
             
-            // Navigate after menu closes
+            // Navigate after a short delay
             if (targetSection) {
                 setTimeout(function() {
-                    var yOffset = -80; // Account for fixed nav
+                    var yOffset = -80;
                     var y = targetSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
                     window.scrollTo({ top: y, behavior: 'smooth' });
-                }, 300);
+                }, 100);
             }
-        }
-        
-        // Add both click and touchend listeners
-        link.addEventListener('click', navigateToSection);
-        link.addEventListener('touchend', navigateToSection);
+        });
     });
 })();
