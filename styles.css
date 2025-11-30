@@ -953,14 +953,15 @@ nav {
 
     .nav-links.active {
         display: block;
-        position: absolute;
-        top: 100%;
+        position: fixed;
+        top: 70px;
         left: 0;
-        right: 0;
+        width: 65%;
         background: #0a0a0b;
-        padding: 40px 30px;
+        padding: 30px 25px;
         z-index: 1000;
         border-bottom: 1px solid rgba(255,255,255,0.1);
+        border-right: 1px solid rgba(255,255,255,0.1);
     }
 
     .nav-links.active li {
@@ -971,9 +972,9 @@ nav {
 
     .nav-links.active li a {
         display: block;
-        padding: 15px 0;
+        padding: 12px 0;
         font-family: 'Cormorant Garamond', Georgia, serif;
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         font-weight: 400;
         font-style: italic;
         color: #8e8e93;
@@ -995,5 +996,6 @@ nav {
 
     .nav-container {
         position: relative;
+        padding: 0 1.5rem;
     }
 }
