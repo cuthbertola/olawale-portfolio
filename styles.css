@@ -790,3 +790,24 @@ nav {
         display: block;
     }
 }
+
+/* Fix Mobile Menu Links */
+@media (max-width: 768px) {
+    .nav-links.active {
+        display: flex !important;
+        pointer-events: auto !important;
+    }
+    
+    .nav-links.active li {
+        pointer-events: auto !important;
+    }
+    
+    .nav-links.active .nav-link {
+        pointer-events: auto !important;
+        cursor: pointer !important;
+        padding: 15px 20px;
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+}
