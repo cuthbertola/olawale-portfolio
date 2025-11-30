@@ -168,8 +168,6 @@ window.addEventListener('scroll', () => {
 // Console Easter egg
 console.log('%c👋 Hello, curious developer!', 'font-size: 20px; font-weight: bold;');
 console.log('%cInterested in working together? Reach out!', 'font-size: 14px; color: #00d4aa;');
-
-
 // Mobile Hamburger Menu
 document.addEventListener('DOMContentLoaded', function() {
     const hamburger = document.querySelector('.hamburger');
@@ -180,26 +178,36 @@ document.addEventListener('DOMContentLoaded', function() {
     overlay.classList.add('nav-overlay');
     document.body.appendChild(overlay);
 
+    function closeMenu() {
+        hamburger.classList.remove('active');
+        navLinks.classList.remove('active');
+        overlay.classList.remove('active');
+    }
+
     if (hamburger && navLinks) {
-        hamburger.addEventListener('click', function() {
+        hamburger.addEventListener('click', function(e) {
+            e.preventDefault();
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('active');
             overlay.classList.toggle('active');
         });
 
         // Close menu when clicking overlay
-        overlay.addEventListener('click', function() {
-            hamburger.classList.remove('active');
-            navLinks.classList.remove('active');
-            overlay.classList.remove('active');
-        });
+        overlay.addEventListener('click', closeMenu);
 
-        // Close menu when clicking a link
+        // Handle nav link clicks
         document.querySelectorAll('.nav-link').forEach(function(link) {
-            link.addEventListener('click', function() {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-                overlay.classList.remove('active');
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                closeMenu();
+                
+                // Small delay to allow menu to close before scrolling
+                setTimeout(function() {
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }, 100);
             });
         });
     }
