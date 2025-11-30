@@ -1,6 +1,6 @@
 // Navigation active state on scroll
 const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.nav-link');
+const navLinksAll = document.querySelectorAll('.nav-link');
 
 function updateActiveNav() {
     const scrollY = window.scrollY;
@@ -11,7 +11,7 @@ function updateActiveNav() {
         const sectionId = section.getAttribute('id');
         
         if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-            navLinks.forEach(link => {
+            navLinksAll.forEach(link => {
                 link.classList.remove('active');
                 if (link.getAttribute('href') === `#${sectionId}`) {
                     link.classList.add('active');
@@ -43,7 +43,6 @@ const revealObserver = new IntersectionObserver(revealCallback, observerOptions)
 
 // Add reveal animation to elements
 document.addEventListener('DOMContentLoaded', () => {
-    // Elements to animate
     const animateElements = [
         '.hero-label',
         '.hero-title .title-line',
@@ -131,29 +130,6 @@ projectCards.forEach(card => {
     });
 });
 
-// Typing effect for hero subtitle (optional enhancement)
-const heroSubtitle = document.querySelector('.hero-subtitle');
-
-if (heroSubtitle) {
-    const text = heroSubtitle.textContent;
-    heroSubtitle.textContent = '';
-    heroSubtitle.style.opacity = '1';
-    
-    let index = 0;
-    const typeSpeed = 30;
-    
-    function typeText() {
-        if (index < text.length) {
-            heroSubtitle.textContent += text.charAt(index);
-            index++;
-            setTimeout(typeText, typeSpeed);
-        }
-    }
-    
-    // Start typing after a delay
-    setTimeout(typeText, 1500);
-}
-
 // Nav background opacity on scroll
 const nav = document.querySelector('nav');
 
@@ -168,47 +144,39 @@ window.addEventListener('scroll', () => {
 // Console Easter egg
 console.log('%c👋 Hello, curious developer!', 'font-size: 20px; font-weight: bold;');
 console.log('%cInterested in working together? Reach out!', 'font-size: 14px; color: #00d4aa;');
-// Mobile Hamburger Menu
-document.addEventListener('DOMContentLoaded', function() {
-    const hamburger = document.querySelector('.hamburger');
-    const navLinks = document.querySelector('.nav-links');
-    
-    // Create overlay element
-    const overlay = document.createElement('div');
-    overlay.classList.add('nav-overlay');
-    document.body.appendChild(overlay);
 
+// Mobile Hamburger Menu
+(function() {
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-links');
+    
+    if (!hamburger || !navMenu) return;
+    
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'nav-overlay';
+    document.body.appendChild(overlay);
+    
     function closeMenu() {
         hamburger.classList.remove('active');
-        navLinks.classList.remove('active');
+        navMenu.classList.remove('active');
         overlay.classList.remove('active');
     }
-
-    if (hamburger && navLinks) {
-        hamburger.addEventListener('click', function(e) {
-            e.preventDefault();
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('active');
-            overlay.classList.toggle('active');
+    
+    // Toggle menu on hamburger click
+    hamburger.addEventListener('click', function() {
+        hamburger.classList.toggle('active');
+        navMenu.classList.toggle('active');
+        overlay.classList.toggle('active');
+    });
+    
+    // Close on overlay click
+    overlay.addEventListener('click', closeMenu);
+    
+    // Close menu and navigate when clicking links
+    navMenu.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+            closeMenu();
         });
-
-        // Close menu when clicking overlay
-        overlay.addEventListener('click', closeMenu);
-
-        // Handle nav link clicks
-        document.querySelectorAll('.nav-link').forEach(function(link) {
-            link.addEventListener('click', function(e) {
-                const href = this.getAttribute('href');
-                closeMenu();
-                
-                // Small delay to allow menu to close before scrolling
-                setTimeout(function() {
-                    const target = document.querySelector(href);
-                    if (target) {
-                        target.scrollIntoView({ behavior: 'smooth' });
-                    }
-                }, 100);
-            });
-        });
-    }
-});
+    });
+})();
