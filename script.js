@@ -90,49 +90,42 @@ if (heroDecoration) {
     });
 }
 
-// Magnetic effect on buttons
-const buttons = document.querySelectorAll('.btn');
+// Magnetic effect on buttons - only for non-touch devices
+if (!('ontouchstart' in window)) {
+    const buttons = document.querySelectorAll('.btn');
+    buttons.forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            btn.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
+        });
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = 'translate(0, 0)';
+        });
+    });
 
-buttons.forEach(btn => {
-    btn.addEventListener('mousemove', (e) => {
-        const rect = btn.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        
-        btn.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
+    // Project card tilt effect - only for non-touch devices
+    const projectCards = document.querySelectorAll('.project-card');
+    projectCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = (y - centerY) / 20;
+            const rotateY = (centerX - x) / 20;
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+        });
     });
-    
-    btn.addEventListener('mouseleave', () => {
-        btn.style.transform = 'translate(0, 0)';
-    });
-});
-
-// Project card tilt effect
-const projectCards = document.querySelectorAll('.project-card');
-
-projectCards.forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        
-        const rotateX = (y - centerY) / 20;
-        const rotateY = (centerX - x) / 20;
-        
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
-    });
-    
-    card.addEventListener('mouseleave', () => {
-        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
-    });
-});
+}
 
 // Nav background opacity on scroll
 const nav = document.querySelector('nav');
-
 window.addEventListener('scroll', () => {
     if (window.scrollY > 100) {
         nav.style.background = 'rgba(10, 10, 11, 0.95)';
@@ -145,7 +138,7 @@ window.addEventListener('scroll', () => {
 console.log('%c👋 Hello, curious developer!', 'font-size: 20px; font-weight: bold;');
 console.log('%cInterested in working together? Reach out!', 'font-size: 14px; color: #00d4aa;');
 
-// Mobile Hamburger Menu - Simple version that doesn't block links
+// Mobile Hamburger Menu with Touch Support
 (function() {
     var hamburger = document.querySelector('.hamburger');
     var navMenu = document.querySelector('.nav-links');
@@ -163,22 +156,52 @@ console.log('%cInterested in working together? Reach out!', 'font-size: 14px; co
         overlay.classList.remove('active');
     }
     
-    // Toggle menu on hamburger click
-    hamburger.addEventListener('click', function() {
-        hamburger.classList.toggle('active');
-        navMenu.classList.toggle('active');
-        overlay.classList.toggle('active');
+    function openMenu() {
+        hamburger.classList.add('active');
+        navMenu.classList.add('active');
+        overlay.classList.add('active');
+    }
+    
+    // Toggle menu on hamburger click/touch
+    hamburger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (navMenu.classList.contains('active')) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
     });
     
-    // Close on overlay click
+    // Close on overlay click/touch
     overlay.addEventListener('click', closeMenu);
     
-    // Just close menu when links are clicked - don't prevent default!
+    // Handle link clicks with BOTH click and touchend
     var links = navMenu.querySelectorAll('a');
-    for (var i = 0; i < links.length; i++) {
-        links[i].addEventListener('click', function() {
-            // Just close the menu, let the link work normally
+    
+    links.forEach(function(link) {
+        // Function to handle navigation
+        function navigateToSection(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            var targetId = link.getAttribute('href');
+            var targetSection = document.querySelector(targetId);
+            
+            // Close menu first
             closeMenu();
-        });
-    }
+            
+            // Navigate after menu closes
+            if (targetSection) {
+                setTimeout(function() {
+                    var yOffset = -80; // Account for fixed nav
+                    var y = targetSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                }, 300);
+            }
+        }
+        
+        // Add both click and touchend listeners
+        link.addEventListener('click', navigateToSection);
+        link.addEventListener('touchend', navigateToSection);
+    });
 })();
