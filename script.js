@@ -169,35 +169,38 @@ window.addEventListener('scroll', () => {
 console.log('%c👋 Hello, curious developer!', 'font-size: 20px; font-weight: bold;');
 console.log('%cInterested in working together? Reach out!', 'font-size: 14px; color: #00d4aa;');
 
+
 // Mobile Hamburger Menu
-const hamburger = document.querySelector('.hamburger');
-const navLinks = document.querySelector('.nav-links');
+document.addEventListener('DOMContentLoaded', function() {
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    
+    // Create overlay element
+    const overlay = document.createElement('div');
+    overlay.classList.add('nav-overlay');
+    document.body.appendChild(overlay);
 
-// Create overlay element
-const overlay = document.createElement('div');
-overlay.classList.add('nav-overlay');
-document.body.appendChild(overlay);
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', function() {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
 
-if (hamburger) {
-    hamburger.addEventListener('click', () => {
-        hamburger.classList.toggle('active');
-        navLinks.classList.toggle('active');
-        overlay.classList.toggle('active');
-    });
-
-    // Close menu when clicking overlay
-    overlay.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        navLinks.classList.remove('active');
-        overlay.classList.remove('active');
-    });
-
-    // Close menu when clicking a link
-    navLinks.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', () => {
+        // Close menu when clicking overlay
+        overlay.addEventListener('click', function() {
             hamburger.classList.remove('active');
             navLinks.classList.remove('active');
             overlay.classList.remove('active');
         });
-    });
-}
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-link').forEach(function(link) {
+            link.addEventListener('click', function() {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+        });
+    }
+});
